@@ -1,0 +1,407 @@
+:root {
+    --accent: #ff6a00;
+    --accent-glow: rgba(255, 106, 0, 0.35);
+    --sidebar-width: 15.6rem;
+    --header-height: 4.4rem;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #d98a5d;
+}
+
+.dashboardShell {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: var(--sidebar-width);
+    flex: 0 0 var(--sidebar-width);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #171717;
+    color: #fff;
+    border-right: 3px solid var(--accent);
+    box-shadow: 0.8rem 0 1.8rem rgba(62, 24, 8, 0.22);
+    transition: width 0.25s ease, flex-basis 0.25s ease;
+}
+
+.dashboardShell.sidebar-collapsed .sidebar {
+    width: 0;
+    flex-basis: 0;
+    border-right: 0;
+}
+
+.sidebar > * {
+    transition: opacity 0.15s ease;
+}
+
+.dashboardShell.sidebar-collapsed .sidebar > * {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebarBackdrop {
+    display: none;
+}
+
+.userAvatar {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.2rem 0.75rem 1.4rem;
+    text-align: center;
+}
+
+.avatarImg {
+    width: auto;
+    max-width: 100%;
+    height: 7.5rem;
+    object-fit: contain;
+}
+
+.userName {
+    margin: 0.4rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.studentNo {
+    margin: 0.15rem 0 0;
+    font-size: 0.78rem;
+}
+
+.navButtons {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 0.75rem 0.75rem;
+    padding: 0.65rem;
+    border: 1px solid rgba(255, 106, 0, 0.35);
+    border-radius: 1.1rem;
+    background: #fff;
+    color: #000;
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.22);
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 0.9rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.navItem:hover,
+.navItem.active {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 0.5rem 1.2rem var(--accent-glow);
+}
+
+.navItem:hover .icon img,
+.navItem.active .icon img {
+    filter: brightness(0) invert(1);
+}
+
+.navItem.logout {
+    color: var(--accent);
+}
+
+.icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.dashboardContent {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.topBar {
+    flex: 0 0 auto;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0 1.2rem;
+    border-bottom: 2px solid var(--accent);
+    background: #fff;
+}
+
+.topBar h1 {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.sidebarToggle {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: 0 0 2.75rem;
+    border: 2px solid var(--accent);
+    border-radius: 0.75rem;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+}
+
+.searchBox {
+    flex: 1;
+    min-width: 0;
+    height: 2.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0 0.9rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 0.75rem;
+    background: #fafafa;
+}
+
+.searchBox input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+}
+
+.iconBtn {
+    width: 3rem;
+    height: 3rem;
+    flex: 0 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid var(--accent);
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.greeting {
+    flex: 0 0 auto;
+    min-height: 8.75rem;
+    padding: 1.35rem 1.5rem;
+    background: #000;
+    color: #fff;
+}
+
+.greeting h2,
+.greeting p {
+    margin: 0;
+}
+
+.greeting .headline {
+    margin-top: 0.35rem;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.greeting .subline {
+    margin-top: 0.25rem;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.dashboardGrid,
+.adminGrid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    gap: 1rem;
+    padding: 0.75rem;
+}
+
+.dashboardGrid {
+    grid-template-columns: 1fr 1fr 21rem;
+}
+
+.adminGrid {
+    grid-template-columns: repeat(4, 1fr);
+    align-content: start;
+}
+
+.dashboardPanel,
+.statCard {
+    border-radius: 1.25rem;
+    background: rgba(238, 208, 194, 0.92);
+    box-shadow: 0 0.4rem 1.2rem rgba(82, 36, 13, 0.08);
+}
+
+.dashboardPanel {
+    padding: 1.25rem;
+}
+
+.panelHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.panelHead h3,
+.panelHead p {
+    margin: 0;
+}
+
+.panelHead a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.panelCards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dataCard {
+    padding: 1.1rem;
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.dataCard h4,
+.dataCard p {
+    margin: 0.35rem 0 0;
+}
+
+.tag {
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.statCard {
+    min-height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.25rem;
+}
+
+.statCard strong {
+    font-size: 2.25rem;
+}
+
+.adminWide {
+    grid-column: 1 / -1;
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.2rem;
+}
+
+.calendarGrid span {
+    min-height: 2.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.35rem;
+    background: #fff;
+}
+
+.calendarGrid .dow {
+    min-height: 1.5rem;
+    background: transparent;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+    .dashboardGrid {
+        grid-template-columns: 1fr 1fr;
+        overflow: auto;
+    }
+
+    .calendarPanel {
+        grid-column: 1 / -1;
+    }
+
+    .adminGrid {
+        grid-template-columns: repeat(2, 1fr);
+        overflow: auto;
+    }
+}
+
+@media (max-width: 760px) {
+    :root {
+        --sidebar-width: 15.6rem;
+    }
+
+    .dashboardShell {
+        overflow: hidden;
+    }
+
+    .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 30;
+        transform: translateX(-100%);
+    }
+
+    .dashboardShell:not(.sidebar-collapsed) .sidebar {
+        transform: translateX(0);
+    }
+
+    .dashboardShell:not(.sidebar-collapsed) .sidebarBackdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        border: 0;
+        background: rgba(0, 0, 0, 0.45);
+    }
+
+    .dashboardContent {
+        width: 100%;
+        overflow: auto;
+    }
+
+    .topBar h1 {
+        font-size: 1.15rem;
+    }
+
+    .dashboardGrid,
+    .adminGrid {
+        grid-template-columns: 1fr;
+        overflow: visible;
+    }
+
+    .calendarPanel,
+    .adminWide {
+        grid-column: auto;
+    }
+}
