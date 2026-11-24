@@ -1,110 +1,122 @@
 (function () {
-    const shell = document.querySelector('.dashboardShell');
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarToggle = document.querySelector('.sidebarToggle');
-    const sidebarBackdrop = document.querySelector('.sidebarBackdrop');
-    const search = document.getElementById('dashboardSearch');
-    const todayDate = document.getElementById('todayDate');
-    const stateKey = 'comfysci-sidebar-hidden';
+    const root = document.documentElement;
+    const sidebar = document.getElementById('dashboardSidebar');
+    const menuButton = document.querySelector('.sidebarToggle');
+    const backdrop = document.querySelector('[data-sidebar-close]');
+    const mobile = window.matchMedia('(max-width: 900px)');
+    let closeTimer;
 
-    function setSidebarHidden(hidden) {
-        if (hidden) {
-            shell.classList.add('sidebar-collapsed');
-            sidebarToggle.setAttribute('aria-expanded', 'false');
-            sidebarToggle.setAttribute('aria-label', 'Show sidebar');
-        } else {
-            shell.classList.remove('sidebar-collapsed');
-            sidebarToggle.setAttribute('aria-expanded', 'true');
-            sidebarToggle.setAttribute('aria-label', 'Hide sidebar');
+    function setSidebarOpen(open) {
+        root.dataset.sidebar = open ? 'open' : 'closed';
+        if (menuButton) {
+            menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+            menuButton.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
         }
+    }
 
-        if (window.innerWidth > 760) {
-            if (hidden) {
-                localStorage.setItem(stateKey, '1');
-            } else {
-                localStorage.setItem(stateKey, '0');
+    if (sidebar) {
+        sidebar.addEventListener('mouseenter', function () {
+            if (!mobile.matches) {
+                window.clearTimeout(closeTimer);
+                setSidebarOpen(true);
             }
-        }
+        });
+        sidebar.addEventListener('mouseleave', function () {
+            if (!mobile.matches) {
+                closeTimer = window.setTimeout(function () { setSidebarOpen(false); }, 140);
+            }
+        });
+        sidebar.addEventListener('focusin', function () {
+            if (!mobile.matches) {
+                window.clearTimeout(closeTimer);
+                setSidebarOpen(true);
+            }
+        });
+        sidebar.addEventListener('focusout', function (event) {
+            if (!mobile.matches && !sidebar.contains(event.relatedTarget)) {
+                setSidebarOpen(false);
+            }
+        });
     }
 
-    const savedHidden = localStorage.getItem(stateKey) === '1';
-    let initialHidden = true;
-    if (window.innerWidth > 760) {
-        initialHidden = savedHidden;
+    if (menuButton) {
+        menuButton.addEventListener('click', function () {
+            setSidebarOpen(root.dataset.sidebar !== 'open');
+        });
     }
-    setSidebarHidden(initialHidden);
-
-    sidebarToggle.addEventListener('click', function () {
-        setSidebarHidden(!shell.classList.contains('sidebar-collapsed'));
-    });
-
-    sidebarBackdrop.addEventListener('click', function () {
-        setSidebarHidden(true);
-    });
-
-    document.addEventListener('keydown', function (event) {
-        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
+    if (backdrop) {
+        backdrop.addEventListener('click', function (event) {
             event.preventDefault();
-            setSidebarHidden(!shell.classList.contains('sidebar-collapsed'));
-        }
-        if (event.key === 'Escape' && window.innerWidth <= 760) {
-            setSidebarHidden(true);
+            setSidebarOpen(false);
+        });
+    }
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            setSidebarOpen(false);
+            closeNotifications();
         }
     });
+    mobile.addEventListener('change', function () {
+        setSidebarOpen(false);
+    });
 
-    if (search) {
-        search.addEventListener('input', function () {
-            const query = search.value.trim().toLowerCase();
-            const searchableItems = document.querySelectorAll('.searchable');
-            searchableItems.forEach(function (item) {
-                if (!query || item.textContent.toLowerCase().includes(query)) {
-                    item.style.display = '';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    }
-
-    if (todayDate) {
-        todayDate.textContent = new Intl.DateTimeFormat('en-PH', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }).format(new Date());
-    }
-
-    const calendarGrid = document.getElementById('calendarGrid');
-    if (calendarGrid) {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth();
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-        weekdays.forEach(function (weekday) {
-            const label = document.createElement('span');
-            label.className = 'dow';
-            label.textContent = weekday;
-            calendarGrid.appendChild(label);
-        });
-
-        for (let index = 0; index < firstDay; index += 1) {
-            const blank = document.createElement('span');
-            calendarGrid.appendChild(blank);
+    const themeButton = document.querySelector('.themeToggle');
+    const themeIcon = themeButton && themeButton.querySelector('.ic');
+    function setTheme(theme) {
+        root.dataset.theme = theme;
+        const dark = theme === 'dark';
+        if (themeIcon) {
+            themeIcon.src = './assets/rai-icons/' + (dark ? 'sun' : 'moon') + '.png';
         }
+        if (themeButton) {
+            themeButton.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+        window.localStorage.setItem('comfysci-dashboard-theme', theme);
+    }
+    const savedTheme = window.localStorage.getItem('comfysci-dashboard-theme');
+    setTheme(savedTheme === 'dark' ? 'dark' : 'light');
+    if (themeButton) {
+        themeButton.addEventListener('click', function () {
+            setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+        });
+    }
 
-        for (let day = 1; day <= daysInMonth; day += 1) {
-            const date = document.createElement('span');
-            date.textContent = day;
-            if (day === now.getDate()) {
-                date.style.background = '#ff6a00';
-                date.style.color = '#fff';
-                date.style.fontWeight = '700';
+    const notificationButton = document.querySelector('.notificationToggle');
+    const notificationPanel = document.querySelector('.notif-pop');
+    function closeNotifications() {
+        if (notificationPanel && notificationButton) {
+            notificationPanel.hidden = true;
+            notificationButton.setAttribute('aria-expanded', 'false');
+        }
+    }
+    if (notificationButton && notificationPanel) {
+        notificationButton.addEventListener('click', function () {
+            notificationPanel.hidden = !notificationPanel.hidden;
+            notificationButton.setAttribute('aria-expanded', notificationPanel.hidden ? 'false' : 'true');
+        });
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.bell-wrap')) {
+                closeNotifications();
             }
-            calendarGrid.appendChild(date);
-        }
+        });
     }
+
+    const addTaskForm = document.querySelector('.add-task-form');
+    document.querySelectorAll('.addTaskToggle').forEach(function (button) {
+        button.addEventListener('click', function () {
+            if (!addTaskForm) {
+                return;
+            }
+            addTaskForm.hidden = !addTaskForm.hidden;
+            document.querySelectorAll('.addTaskToggle').forEach(function (toggle) {
+                toggle.setAttribute('aria-expanded', addTaskForm.hidden ? 'false' : 'true');
+            });
+            if (!addTaskForm.hidden) {
+                const title = addTaskForm.querySelector('input[name="title"]');
+                if (title) {
+                    title.focus();
+                }
+            }
+        });
+    });
 }());

@@ -2,67 +2,93 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/dashboard_helpers.php';
+
 $pageTitle = 'Administrator Dashboard';
+$adminData = dashboard_load_admin();
+$counts = $adminData['counts'];
+$announcements = $adminData['announcements'];
+$flashMessage = (string) ($_SESSION['dashboard_flash'] ?? '');
+unset($_SESSION['dashboard_flash']);
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light" data-sidebar="closed">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
-    <link rel="stylesheet" href="./assets/dashboard.css">
+    <title><?= dashboard_escape($pageTitle) ?></title>
+    <link rel="stylesheet" href="./assets/dashboard.css?v=6">
 </head>
-<body data-dashboard-role="admin">
-    <div class="dashboardShell">
-        <button class="sidebarBackdrop" type="button" aria-label="Close sidebar"></button>
+<body>
+<div class="app">
+    <aside class="sidebar" id="dashboardSidebar" aria-label="Administrator navigation">
+        <div class="avatar"><img src="./assets/profileIcon.png" alt="" class="avatarImg"></div>
+        <h2 class="student-name"><?= dashboard_escape($userName) ?></h2>
+        <p class="student-no">Administrator</p>
+        <nav class="nav-panel" aria-label="Main navigation">
+            <ul>
+                <li><a href="#dashboard" class="active" aria-current="page" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
+                <li><a href="#users" title="Users"><?= dashboard_icon('user') ?><span class="nav-label">Users</span></a></li>
+                <li><a href="#blocks" title="Blocks"><?= dashboard_icon('layout') ?><span class="nav-label">Blocks</span></a></li>
+                <li><a href="#assignments" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>
+                <li><a href="#events" title="Events"><?= dashboard_icon('calendar') ?><span class="nav-label">Events</span></a></li>
+                <li><a href="#announcements" title="Announcements"><?= dashboard_icon('bell') ?><span class="nav-label">Announcements</span></a></li>
+            </ul>
+            <a href="../auth/logout.php" class="logout" title="Logout"><?= dashboard_icon('logout') ?><span class="nav-label">Logout</span></a>
+        </nav>
+    </aside>
+    <a class="sidebarBackdrop" href="#" data-sidebar-close aria-label="Close navigation"></a>
 
-        <aside class="sidebar" id="dashboardSidebar">
-            <div class="userAvatar">
-                <img class="avatarImg" src="./assets/profileImage.png" alt="Profile picture">
-                <p class="userName"><?= htmlspecialchars($userName, ENT_QUOTES, 'UTF-8') ?></p>
-                <p class="studentNo">Admin: <?= htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8') ?></p>
+    <div class="main">
+        <header class="topbar">
+            <div class="top-left">
+                <button class="icon-btn sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false" aria-label="Open navigation"><?= dashboard_icon('menu', 18) ?></button>
+                <span class="tab"><?= dashboard_icon('layout', 16) ?>Dashboard</span>
             </div>
-            <nav class="navButtons" aria-label="Administrator navigation">
-                <a class="navItem active" href="#dashboard"><span class="icon"><img src="./assets/dashboardIcon.png" alt=""></span><span class="label">Dashboard</span></a>
-                <a class="navItem" href="#users"><span class="icon"><img src="./assets/profileIcon.png" alt=""></span><span class="label">Users</span></a>
-                <a class="navItem" href="#blocks"><span class="icon"><img src="./assets/moduleIcon.png" alt=""></span><span class="label">Blocks</span></a>
-                <a class="navItem" href="#assignments"><span class="icon"><img src="./assets/assignmentIcon.png" alt=""></span><span class="label">Assignments</span></a>
-                <a class="navItem" href="#events"><span class="icon"><img src="./assets/academicCalendarIcon.png" alt=""></span><span class="label">Events</span></a>
-                <a class="navItem" href="#announcements"><span class="icon"><img src="./assets/announcementIcon.png" alt=""></span><span class="label">Announcements</span></a>
-                <a class="navItem logout" href="../auth/logout.php"><span class="icon"><img src="./assets/logoutIcon.png" alt=""></span><span class="label">Logout</span></a>
-            </nav>
-        </aside>
-
-        <main class="dashboardContent">
-            <header class="topBar">
-                <button class="sidebarToggle" type="button" aria-label="Hide sidebar" aria-controls="dashboardSidebar" aria-expanded="true" title="Toggle sidebar (Ctrl + B)"><span aria-hidden="true">☰</span></button>
-                <h1>Administrator Dashboard</h1>
-                <label class="searchBox">
-                    <span class="icon"><img src="./assets/searchIcon.png" alt=""></span>
-                    <input id="dashboardSearch" type="search" placeholder="Search management records..." aria-label="Search dashboard">
-                </label>
-            </header>
-
-            <section class="greeting">
-                <h2>Hi, <?= htmlspecialchars($userName, ENT_QUOTES, 'UTF-8') ?></h2>
-                <p class="headline">Administration overview</p>
-                <p class="subline" id="todayDate"></p>
+            <div class="actions">
+                <button class="icon-btn themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><?= dashboard_icon('moon', 18) ?></button>
+            </div>
+        </header>
+        <main class="content" id="dashboard">
+            <section class="hero">
+                <h1>Welcome, <?= dashboard_escape($userName) ?>!</h1>
+                <h2>Administrator overview</h2>
+                <p>Here’s a quick look at your students, assignments, events, and announcements.</p>
             </section>
-
-            <div class="adminGrid">
-                <section class="statCard searchable" id="users"><strong>0</strong><span>Students</span></section>
-                <section class="statCard searchable" id="blocks"><strong>0</strong><span>Blocks</span></section>
-                <section class="statCard searchable" id="assignments"><strong>0</strong><span>Assignments</span></section>
-                <section class="statCard searchable" id="events"><strong>0</strong><span>Events</span></section>
-                <section class="dashboardPanel adminWide searchable" id="announcements">
-                    <div class="panelHead"><h3>Recent Announcements</h3><a href="#announcements">Manage</a></div>
-                    <div class="panelCards">
-                        <article class="dataCard"><p class="tag">Announcement</p><h4>No announcements loaded</h4><p>Database data will appear here.</p></article>
+            <?php if ($flashMessage !== ''): ?><p class="toast" role="status"><?= dashboard_escape($flashMessage) ?></p><?php endif; ?>
+            <div class="admin-dashboard-grid">
+                <section class="admin-stat" id="users">
+                    <?= dashboard_icon('user', 22) ?><strong><?= $counts['students'] ?></strong><span>Students</span>
+                </section>
+                <section class="admin-stat" id="blocks">
+                    <?= dashboard_icon('layout', 22) ?><strong><?= $counts['blocks'] ?></strong><span>Blocks</span>
+                </section>
+                <section class="admin-stat" id="assignments">
+                    <?= dashboard_icon('file', 22) ?><strong><?= $counts['assignments'] ?></strong><span>Assignments</span>
+                </section>
+                <section class="admin-stat" id="events">
+                    <?= dashboard_icon('calendar', 22) ?><strong><?= $counts['events'] ?></strong><span>Events</span>
+                </section>
+                <section class="card admin-announcements" id="announcements">
+                    <div class="card-head">
+                        <h3><?= dashboard_icon('bell', 17) ?>Recent announcements</h3>
+                        <span class="link-muted"><?= count($announcements) ?> total shown</span>
+                    </div>
+                    <?php if (!$announcements): ?><p class="empty">No announcements have been posted yet.</p><?php endif; ?>
+                    <div class="scroll">
+                        <?php foreach ($announcements as $announcement): ?>
+                            <article class="note">
+                                <h4><?= dashboard_escape($announcement['title']) ?></h4>
+                                <p class="muted"><?= dashboard_escape(mb_strimwidth((string) $announcement['content'], 0, 180, '…')) ?></p>
+                                <p class="meta"><?= dashboard_escape(date('D, M j · g:i A', strtotime((string) $announcement['createdAt']))) ?></p>
+                            </article>
+                        <?php endforeach; ?>
                     </div>
                 </section>
             </div>
         </main>
     </div>
-    <script src="./assets/dashboard.js"></script>
+</div>
+<script src="./assets/dashboard.js?v=6"></script>
 </body>
 </html>
