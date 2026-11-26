@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $studentStatement = $pdo->prepare(
                 'SELECT studentID, studentFirstName, studentLastName, studentEmail, studentPassword
                  FROM tblstudent
-                 WHERE studentEmail = ?'
+                 WHERE studentEmail = ? AND archivedAt IS NULL'
             );
             $studentStatement->execute([$email]);
             $student = $studentStatement->fetch();
