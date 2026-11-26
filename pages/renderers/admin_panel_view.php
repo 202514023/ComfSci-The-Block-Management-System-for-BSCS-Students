@@ -18,6 +18,7 @@ declare(strict_types=1);
     <div class="main">
         <header class="topbar">
             <div class="top-left">
+                <button class="icon-btn sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false" aria-label="Open navigation"><?= dashboard_icon('menu', 18) ?></button>
                 <span class="tab"><?= dashboard_icon('layout', 16) ?><?= dashboard_escape($entity['title']) ?></span>
             </div>
             <div class="actions">
