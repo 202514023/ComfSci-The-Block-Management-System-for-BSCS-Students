@@ -58,12 +58,12 @@ $notificationCount = count($notifications) + count($soonNotifications);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= dashboard_escape($pageTitle) ?></title>
-    <link rel="stylesheet" href="./assets/dashboard.css?v=6">
+    <link rel="stylesheet" href="./assets/dashboard.css?v=9">
 </head>
 <body>
 <div class="app">
     <aside class="sidebar" id="dashboardSidebar" aria-label="Student navigation">
-        <div class="avatar" id="profile">
+        <div class="avatar">
             <img src="./assets/profileIcon.png" alt="" class="avatarImg">
         </div>
         <h2 class="student-name"><?= dashboard_escape($student['name']) ?></h2>
@@ -71,7 +71,8 @@ $notificationCount = count($notifications) + count($soonNotifications);
         <nav class="nav-panel" aria-label="Main navigation">
             <ul>
                 <li><a href="#dashboard" class="active" aria-current="page" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
-                <li><a href="#profile" title="Profile"><?= dashboard_icon('user') ?><span class="nav-label">Profile</span></a></li>
+                <li><a href="./student_profile.php" title="Profile"><?= dashboard_icon('user') ?><span class="nav-label">Profile</span></a></li>
+                <li><a href="./student_class.php" title="Class"><?= dashboard_icon('download') ?><span class="nav-label">Classes</span></a></li>
                 <li><a href="#attendance" title="Attendance"><?= dashboard_icon('attendance') ?><span class="nav-label">Attendance</span></a></li>
                 <li><a href="#gamifiedQuiz" title="Gamified Quiz"><?= dashboard_icon('quiz') ?><span class="nav-label">Gamified Quiz</span></a></li>
                 <li><a href="#assignments" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>

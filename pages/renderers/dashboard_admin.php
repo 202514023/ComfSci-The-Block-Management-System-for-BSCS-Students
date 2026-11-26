@@ -8,8 +8,6 @@ $pageTitle = 'Administrator Dashboard';
 $adminData = dashboard_load_admin();
 $counts = $adminData['counts'];
 $announcements = $adminData['announcements'];
-$flashMessage = (string) ($_SESSION['dashboard_flash'] ?? '');
-unset($_SESSION['dashboard_flash']);
 ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="light" data-sidebar="closed">
@@ -17,7 +15,7 @@ unset($_SESSION['dashboard_flash']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= dashboard_escape($pageTitle) ?></title>
-    <link rel="stylesheet" href="./assets/dashboard.css?v=6">
+    <link rel="stylesheet" href="./assets/dashboard.css?v=9">
 </head>
 <body>
 <div class="app">
@@ -27,12 +25,12 @@ unset($_SESSION['dashboard_flash']);
         <p class="student-no">Administrator</p>
         <nav class="nav-panel" aria-label="Main navigation">
             <ul>
-                <li><a href="#dashboard" class="active" aria-current="page" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
-                <li><a href="#users" title="Users"><?= dashboard_icon('user') ?><span class="nav-label">Users</span></a></li>
-                <li><a href="#blocks" title="Blocks"><?= dashboard_icon('layout') ?><span class="nav-label">Blocks</span></a></li>
-                <li><a href="#assignments" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>
-                <li><a href="#events" title="Events"><?= dashboard_icon('calendar') ?><span class="nav-label">Events</span></a></li>
-                <li><a href="#announcements" title="Announcements"><?= dashboard_icon('bell') ?><span class="nav-label">Announcements</span></a></li>
+                <li><a href="./dashboard.php" class="active" aria-current="page" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
+                <li><a href="./admin_students.php" title="Students"><?= dashboard_icon('user') ?><span class="nav-label">Students</span></a></li>
+                <li><a href="./admin_blocks.php" title="Blocks"><?= dashboard_icon('layout') ?><span class="nav-label">Blocks</span></a></li>
+                <li><a href="./admin_assignments.php" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>
+                <li><a href="./admin_events.php" title="Events"><?= dashboard_icon('calendar') ?><span class="nav-label">Events</span></a></li>
+                <li><a href="./admin_announcements.php" title="Announcements"><?= dashboard_icon('bell') ?><span class="nav-label">Announcements</span></a></li>
             </ul>
             <a href="../auth/logout.php" class="logout" title="Logout"><?= dashboard_icon('logout') ?><span class="nav-label">Logout</span></a>
         </nav>
@@ -49,32 +47,23 @@ unset($_SESSION['dashboard_flash']);
                 <button class="icon-btn themeToggle" type="button" aria-label="Switch to dark mode" title="Switch theme"><?= dashboard_icon('moon', 18) ?></button>
             </div>
         </header>
-        <main class="content" id="dashboard">
+        <main class="content admin-content">
             <section class="hero">
                 <h1>Welcome, <?= dashboard_escape($userName) ?>!</h1>
                 <h2>Administrator overview</h2>
-                <p>Here’s a quick look at your students, assignments, events, and announcements.</p>
+                <p>Choose a section to manage its records.</p>
             </section>
-            <?php if ($flashMessage !== ''): ?><p class="toast" role="status"><?= dashboard_escape($flashMessage) ?></p><?php endif; ?>
             <div class="admin-dashboard-grid">
-                <section class="admin-stat" id="users">
-                    <?= dashboard_icon('user', 22) ?><strong><?= $counts['students'] ?></strong><span>Students</span>
-                </section>
-                <section class="admin-stat" id="blocks">
-                    <?= dashboard_icon('layout', 22) ?><strong><?= $counts['blocks'] ?></strong><span>Blocks</span>
-                </section>
-                <section class="admin-stat" id="assignments">
-                    <?= dashboard_icon('file', 22) ?><strong><?= $counts['assignments'] ?></strong><span>Assignments</span>
-                </section>
-                <section class="admin-stat" id="events">
-                    <?= dashboard_icon('calendar', 22) ?><strong><?= $counts['events'] ?></strong><span>Events</span>
-                </section>
-                <section class="card admin-announcements" id="announcements">
+                <a class="admin-stat" href="./admin_students.php"><?= dashboard_icon('user', 22) ?><strong><?= $counts['students'] ?></strong><span>Active students</span></a>
+                <a class="admin-stat" href="./admin_blocks.php"><?= dashboard_icon('layout', 22) ?><strong><?= $counts['blocks'] ?></strong><span>Active blocks</span></a>
+                <a class="admin-stat" href="./admin_assignments.php"><?= dashboard_icon('file', 22) ?><strong><?= $counts['assignments'] ?></strong><span>Active assignments</span></a>
+                <a class="admin-stat" href="./admin_events.php"><?= dashboard_icon('calendar', 22) ?><strong><?= $counts['events'] ?></strong><span>Active events</span></a>
+                <section class="card admin-announcements">
                     <div class="card-head">
                         <h3><?= dashboard_icon('bell', 17) ?>Recent announcements</h3>
-                        <span class="link-muted"><?= count($announcements) ?> total shown</span>
+                        <a class="link-orange" href="./admin_announcements.php">Manage announcements</a>
                     </div>
-                    <?php if (!$announcements): ?><p class="empty">No announcements have been posted yet.</p><?php endif; ?>
+                    <?php if (!$announcements): ?><p class="empty">No active announcements.</p><?php endif; ?>
                     <div class="scroll">
                         <?php foreach ($announcements as $announcement): ?>
                             <article class="note">
@@ -89,6 +78,6 @@ unset($_SESSION['dashboard_flash']);
         </main>
     </div>
 </div>
-<script src="./assets/dashboard.js?v=6"></script>
+<script src="./assets/dashboard.js?v=7"></script>
 </body>
 </html>
