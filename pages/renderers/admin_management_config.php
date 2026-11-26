@@ -50,7 +50,7 @@ return [
             ['name' => 'eventDescription', 'label' => 'Description', 'type' => 'textarea', 'full' => true],
             ['name' => 'eventDate', 'label' => 'Date', 'type' => 'date', 'required' => true],
             ['name' => 'eventStartTime', 'label' => 'Start time', 'type' => 'time', 'required' => true],
-            ['name' => 'eventEndTime', 'label' => 'End time', 'type' => 'time'],
+            ['name' => 'eventEndTime', 'label' => 'End time', 'type' => 'time', 'required' => true],
             ['name' => 'eventLocation', 'label' => 'Location', 'type' => 'text', 'required' => true, 'maxlength' => 150],
             ['name' => 'participationFee', 'label' => 'Participation fee', 'type' => 'number', 'required' => true, 'step' => '0.01', 'min' => '0'],
             ['name' => 'eventStatus', 'label' => 'Status', 'type' => 'select', 'required' => true, 'options' => ['Upcoming', 'Ongoing', 'Completed', 'Cancelled']],

@@ -67,7 +67,7 @@ $entities = [
             'eventDescription' => ['text', null, true],
             'eventDate' => ['date'],
             'eventStartTime' => ['time'],
-            'eventEndTime' => ['time', null, true],
+            'eventEndTime' => ['time'],
             'eventLocation' => ['text', 150],
             'participationFee' => ['money'],
             'eventStatus' => ['choice', ['Upcoming', 'Ongoing', 'Completed', 'Cancelled']],
@@ -236,8 +236,7 @@ try {
         $values['adminID'] = (int) $_SESSION['user_id'];
     }
 
-    if ($entityKey === 'events' && !empty($values['eventEndTime'])
-        && $values['eventEndTime'] <= $values['eventStartTime']) {
+    if ($entityKey === 'events' && $values['eventEndTime'] <= $values['eventStartTime']) {
         throw new InvalidArgumentException('Event end time must be after its start time.');
     }
 

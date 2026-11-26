@@ -16,31 +16,15 @@ $announcements = $adminData['announcements'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= dashboard_escape($pageTitle) ?></title>
     <link rel="stylesheet" href="./assets/dashboard.css?v=9">
+    <link rel="stylesheet" href="./assets/sidebar.css?v=1">
 </head>
-<body>
+<body class="comfsci-shell">
 <div class="app">
-    <aside class="sidebar" id="dashboardSidebar" aria-label="Administrator navigation">
-        <div class="avatar"><img src="./assets/profileIcon.png" alt="" class="avatarImg"></div>
-        <h2 class="student-name"><?= dashboard_escape($userName) ?></h2>
-        <p class="student-no">Administrator</p>
-        <nav class="nav-panel" aria-label="Main navigation">
-            <ul>
-                <li><a href="./dashboard.php" class="active" aria-current="page" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
-                <li><a href="./admin_students.php" title="Students"><?= dashboard_icon('user') ?><span class="nav-label">Students</span></a></li>
-                <li><a href="./admin_blocks.php" title="Blocks"><?= dashboard_icon('layout') ?><span class="nav-label">Blocks</span></a></li>
-                <li><a href="./admin_assignments.php" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>
-                <li><a href="./admin_events.php" title="Events"><?= dashboard_icon('calendar') ?><span class="nav-label">Events</span></a></li>
-                <li><a href="./admin_announcements.php" title="Announcements"><?= dashboard_icon('bell') ?><span class="nav-label">Announcements</span></a></li>
-            </ul>
-            <a href="../auth/logout.php" class="logout" title="Logout"><?= dashboard_icon('logout') ?><span class="nav-label">Logout</span></a>
-        </nav>
-    </aside>
-    <a class="sidebarBackdrop" href="#" data-sidebar-close aria-label="Close navigation"></a>
+    <?php require __DIR__ . '/../includes/sidebar.php'; ?>
 
     <div class="main">
         <header class="topbar">
             <div class="top-left">
-                <button class="icon-btn sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false" aria-label="Open navigation"><?= dashboard_icon('menu', 18) ?></button>
                 <span class="tab"><?= dashboard_icon('layout', 16) ?>Dashboard</span>
             </div>
             <div class="actions">
@@ -79,5 +63,6 @@ $announcements = $adminData['announcements'];
     </div>
 </div>
 <script src="./assets/dashboard.js?v=7"></script>
+<?php require __DIR__ . '/../includes/ai_chat_widget.php'; ?>
 </body>
 </html>

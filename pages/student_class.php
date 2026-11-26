@@ -34,33 +34,15 @@ $pageTitle = 'Student Profile';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= dashboard_escape($pageTitle) ?></title>
     <link rel="stylesheet" href="./assets/dashboard.css?v=10">
+    <link rel="stylesheet" href="./assets/sidebar.css?v=1">
 </head>
-<body>
+<body class="comfsci-shell">
 <div class="app">
-    <aside class="sidebar" id="dashboardSidebar" aria-label="Student navigation">
-        <div class="avatar"><img src="./assets/profileIcon.png" alt="" class="avatarImg"></div>
-        <h2 class="student-name"><?= dashboard_escape($userName) ?></h2>
-        <p class="student-no">Student Number: <?= dashboard_escape((string) $profile['studentID']) ?></p>
-        <nav class="nav-panel" aria-label="Main navigation">
-            <ul>
-                <li><a href="./dashboard.php" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
-                <li><a href="./student_profile.php" class="active" aria-current="page" title="Profile"><?= dashboard_icon('user') ?><span class="nav-label">Profile</span></a></li>
-                <li><a href="./dashboard.php#attendance" title="Attendance"><?= dashboard_icon('attendance') ?><span class="nav-label">Attendance</span></a></li>
-                <li><a href="./dashboard.php#gamifiedQuiz" title="Gamified Quiz"><?= dashboard_icon('quiz') ?><span class="nav-label">Gamified Quiz</span></a></li>
-                <li><a href="./dashboard.php#assignments" title="Assignments"><?= dashboard_icon('file') ?><span class="nav-label">Assignments</span></a></li>
-                <li><a href="./dashboard.php#notifications" title="Announcements"><?= dashboard_icon('bell') ?><span class="nav-label">Announcements</span></a></li>
-                <li><a href="./dashboard.php#academicCalendar" title="Academic Calendar"><?= dashboard_icon('calendar') ?><span class="nav-label">Academic Calendar</span></a></li>
-                <li><a href="./dashboard.php#moduleSources" title="Module Sources"><?= dashboard_icon('download') ?><span class="nav-label">Module Sources</span></a></li>
-            </ul>
-            <a href="../auth/logout.php" class="logout" title="Logout"><?= dashboard_icon('logout') ?><span class="nav-label">Logout</span></a>
-        </nav>
-    </aside>
-    <a class="sidebarBackdrop" href="#" data-sidebar-close aria-label="Close navigation"></a>
+    <?php require __DIR__ . '/includes/sidebar.php'; ?>
 
     <div class="main">
         <header class="topbar">
             <div class="top-left">
-                <button class="icon-btn sidebarToggle" type="button" aria-controls="dashboardSidebar" aria-expanded="false" aria-label="Open navigation"><?= dashboard_icon('menu', 18) ?></button>
                 <span class="tab"><?= dashboard_icon('user', 16) ?>Profile</span>
             </div>
             <div class="actions">
@@ -115,5 +97,6 @@ $pageTitle = 'Student Profile';
     </div>
 </div>
 <script src="./assets/dashboard.js?v=7"></script>
+<?php require __DIR__ . '/includes/ai_chat_widget.php'; ?>
 </body>
 </html>

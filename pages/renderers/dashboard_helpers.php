@@ -64,7 +64,7 @@ function dashboard_load_student(int $studentId): array
 {
     $pdo = db();
     $statement = $pdo->prepare(
-        'SELECT studentID, studentFirstName, studentLastName, blockID
+        'SELECT studentID, studentFirstName, studentLastName, blockID, isClassRep, isGroupLeader
          FROM tblstudent WHERE studentID = ? AND archivedAt IS NULL'
     );
     $statement->execute([$studentId]);
@@ -78,6 +78,8 @@ function dashboard_load_student(int $studentId): array
         'name' => trim((string) $record['studentFirstName'] . ' ' . (string) $record['studentLastName']),
         'number' => (int) $record['studentID'],
         'blockID' => (int) $record['blockID'],
+        'isClassRep' => (int) $record['isClassRep'] === 1,
+        'isGroupLeader' => (int) $record['isGroupLeader'] === 1,
     ];
 
     $clearedStatement = $pdo->prepare('SELECT clearedAt FROM tblnotificationclear WHERE studentID = ?');

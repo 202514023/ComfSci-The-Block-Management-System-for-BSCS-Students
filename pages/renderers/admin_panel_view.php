@@ -9,30 +9,11 @@ declare(strict_types=1);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= dashboard_escape($pageTitle) ?></title>
     <link rel="stylesheet" href="./assets/dashboard.css?v=9">
+    <link rel="stylesheet" href="./assets/sidebar.css?v=1">
 </head>
-<body>
+<body class="comfsci-shell">
 <div class="app">
-    <aside class="sidebar" id="dashboardSidebar" aria-label="Administrator navigation">
-        <div class="avatar"><img src="./assets/profileIcon.png" alt="" class="avatarImg"></div>
-        <h2 class="student-name"><?= dashboard_escape($userName) ?></h2>
-        <p class="student-no">Administrator</p>
-        <nav class="nav-panel" aria-label="Main navigation">
-            <ul>
-                <li><a href="./dashboard.php" title="Dashboard"><?= dashboard_icon('dashboard') ?><span class="nav-label">Dashboard</span></a></li>
-                <?php foreach ([
-                    'students' => ['Students', 'user'],
-                    'blocks' => ['Blocks', 'layout'],
-                    'assignments' => ['Assignments', 'file'],
-                    'events' => ['Events', 'calendar'],
-                    'announcements' => ['Announcements', 'bell'],
-                ] as $navKey => [$navLabel, $navIcon]): ?>
-                    <li><a href="./admin_<?= dashboard_escape($navKey) ?>.php"<?= $adminEntity === $navKey ? ' class="active" aria-current="page"' : '' ?> title="<?= dashboard_escape($navLabel) ?>"><?= dashboard_icon($navIcon) ?><span class="nav-label"><?= dashboard_escape($navLabel) ?></span></a></li>
-                <?php endforeach; ?>
-            </ul>
-            <a href="../auth/logout.php" class="logout" title="Logout"><?= dashboard_icon('logout') ?><span class="nav-label">Logout</span></a>
-        </nav>
-    </aside>
-    <a class="sidebarBackdrop" href="#" data-sidebar-close aria-label="Close navigation"></a>
+    <?php require __DIR__ . '/../includes/sidebar.php'; ?>
 
     <div class="main">
         <header class="topbar">
@@ -58,5 +39,6 @@ declare(strict_types=1);
     </div>
 </div>
 <script src="./assets/dashboard.js?v=7"></script>
+<?php require __DIR__ . '/../includes/ai_chat_widget.php'; ?>
 </body>
 </html>
